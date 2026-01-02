@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  electricity-monitor:
+    build: .
+    image: electricity-monitor:latest
+    container_name: electricity-monitor
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      # ========== Cookie配置（失效时修改此处） ==========
+      - USER_COOKIE=YOUR_COOKIE_HERE
+      # ========== 告警配置 ==========
+      - ELECTRICITY_THRESHOLD=20
+      - CHECK_INTERVAL=3600
+      # ========== 邮箱配置 ==========
+      - SMTP_SERVER=smtp.qq.com
+      - SMTP_PORT=465
+      - SMTP_USE_SSL=true
+      - SENDER_EMAIL=your_email@qq.com
+      - SENDER_PASSWORD=your_smtp_password
+      - RECEIVER_EMAIL=receiver@example.com
+    volumes:
+      - ./logs:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
